@@ -25,7 +25,6 @@ class Connection:
     def connect_pass(self, password):
         """
         :param password:
-        :param ssh_client:
         :return:
         """
         print(f'Connecting to {self.server_ip}')
@@ -39,8 +38,7 @@ class Connection:
 
     def connect_keys(self, keys):
         """
-
-        :param keys: Path to the private key in the local machine
+        :param keys:
         :return:
         """
         print(f'Connecting to {self.server_ip}')
