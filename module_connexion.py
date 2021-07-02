@@ -6,7 +6,7 @@ import re
 
 def check_ip(ip):
     if type(ip) != str:
-        raise Exception("Check Ip error: Ip is not of expected type")
+        raise Exception("Check Ip type error: The provided ip is not of type string")
     else:
         regex = "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$"
         if re.search(regex, ip):
@@ -24,12 +24,13 @@ class Connection:
 
     def connect_pass(self, password):
         """
-        :param password:
-        :return:
+        :param password: required password the connect to the server
+        :return: returning the ssh client (password authentication case)
         """
         print(f'Connecting to {self.server_ip}')
         try:
-            self.ssh_client.connect(hostname=self.server_ip, port=self.server_port, username=self.user, password=password, look_for_keys=False, allow_agent=False)
+            self.ssh_client.connect(hostname=self.server_ip, port=self.server_port, username=self.user,
+                                    password=password, look_for_keys=False, allow_agent=False)
             return self.ssh_client
         except AuthenticationException:
             print("Authentication failed for some reason, retry with different credentials")
@@ -39,14 +40,14 @@ class Connection:
     def connect_keys(self, keys):
         """
         :param keys:
-        :return:
+        :return: returning the ssh client (key authentication case)
         """
         print(f'Connecting to {self.server_ip}')
         try:
-            self.ssh_client.connect(hostname=self.server_ip, port=self.server_port, username=self.user ,key_filename=keys)
+            self.ssh_client.connect(hostname=self.server_ip, port=self.server_port, username=self.user, key_filename=keys)
             return self.ssh_client
         except FileNotFoundError:
-            raise ("The key file you provided does not exist")
+            raise ("The ssh key file you provided does not exist")
         except BadHostKeyException:
             raise("You provided the wrong ssh key")
         except TimeoutError:
@@ -60,7 +61,7 @@ class SshClient:
 
     def close(self):
         """
-        :return:
+        Closing the ssh connection
         """
         if self.ssh_client.get_transport().is_active():
             print('Closing the connection')
